@@ -1,0 +1,35 @@
+# ADK Multi-Agent Bug Finder Workflow
+
+agents:
+  - name: code_reader
+    role: Reads code and summarizes it
+    implementation: <TO_BE_DEFINED>
+
+  - name: bug_identifier
+    role: Detects bugs in the code
+    implementation: <TO_BE_DEFINED>
+
+  - name: fix_recommender
+    role: Recommends fixes for detected bugs
+    implementation: <TO_BE_DEFINED>
+
+  - name: code_executor
+    role: Executes code in a safe sandbox
+    implementation: <TO_BE_DEFINED>
+
+workflow:
+  - step: code_reader
+    input: sample_code/*.py
+    output: code_summary
+
+  - step: bug_identifier
+    input: code_summary
+    output: bug_report
+
+  - step: fix_recommender
+    input: bug_report
+    output: fix_suggestions
+
+  - step: code_executor
+    input: fix_suggestions
+    output: execution_results 
