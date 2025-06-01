@@ -1,0 +1,3 @@
+# Requirements for Multi-Agent Bug Finder using ADK
+# Add the correct ADK package name below if available on PyPI
+adk  # Replace with the actual package name if different 
