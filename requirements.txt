@@ -1,5 +1,0 @@
-# Requirements for Multi-Agent Bug Finder using ADK
-# Install ADK as per official instructions if not available on PyPI
-adk==0.0.5 # Replace with the actual package name if different
-
-# Standard library modules are used (os, ast, json, io, sys, traceback, re), no extra packages required 
