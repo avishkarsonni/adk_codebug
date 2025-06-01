@@ -2,6 +2,15 @@ from google.adk.agents import ToolkitAgent
 import subprocess
 import tempfile
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+# For demonstration, print the keys (in real code, do not print secrets)
+# print(f"GOOGLE_API_KEY: {GOOGLE_API_KEY}")
+# print(f"GEMINI_API_KEY: {GEMINI_API_KEY}")
 
 class CodeExecutorAgent(ToolkitAgent):
     def __init__(self):
