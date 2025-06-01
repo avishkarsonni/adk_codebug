@@ -2,4 +2,4 @@ google-adk
 google-agents
 google-generativeai
 rich
-# streamlit  # Optional: Uncomment if you want to use Streamlit UI 
+streamlit  # Optional: Uncomment if you want to use Streamlit UI 

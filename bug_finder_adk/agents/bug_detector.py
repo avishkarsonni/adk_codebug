@@ -1,10 +1,15 @@
-from google.adk.agents import LlmAgent
+from google.adk.agents import ToolkitAgent
 
-bug_detector = LlmAgent(
-    name="bug_detector",
-    model="gemini-2.0-flash",
-    instruction="Given a summary of Python code, identify any bugs (syntax or logic errors) and list them with line numbers and descriptions."
-)
+class BugDetectorAgent(ToolkitAgent):
+    def __init__(self):
+        super().__init__(
+            name="bug_detector",
+            model="gemini-2.0-flash",
+            instruction="Analyze the provided Python code and identify any bugs (syntax or logic errors). List the bugs with line numbers and descriptions. Return the result as a string.",
+        )
 
-def run(input_summary):
-    return bug_detector.run(input=input_summary) 
+    def run(self, input: dict):
+        code = input.get("code", "")
+        if not code:
+            return "Error: No code provided in input."
+        return super().run(input={"code": code}) 
