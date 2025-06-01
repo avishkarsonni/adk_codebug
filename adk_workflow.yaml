@@ -3,33 +3,33 @@
 agents:
   - name: code_reader
     role: Reads code and summarizes it
-    implementation: <TO_BE_DEFINED>
+    implementation: python code_reader_agent.py
 
   - name: bug_identifier
     role: Detects bugs in the code
-    implementation: <TO_BE_DEFINED>
+    implementation: python bug_identifier_agent.py
 
   - name: fix_recommender
     role: Recommends fixes for detected bugs
-    implementation: <TO_BE_DEFINED>
+    implementation: python fix_recommender_agent.py
 
   - name: code_executor
     role: Executes code in a safe sandbox
-    implementation: <TO_BE_DEFINED>
+    implementation: python code_executor_agent.py
 
 workflow:
   - step: code_reader
     input: sample_code/*.py
-    output: code_summary
+    output: code_summary.json
 
   - step: bug_identifier
-    input: code_summary
-    output: bug_report
+    input: sample_code/*.py
+    output: bug_report.json
 
   - step: fix_recommender
-    input: bug_report
-    output: fix_suggestions
+    input: bug_report.json
+    output: fix_suggestions.json
 
   - step: code_executor
-    input: fix_suggestions
-    output: execution_results 
+    input: sample_code/*.py
+    output: execution_results.json 
