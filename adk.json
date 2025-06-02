@@ -1,6 +1,9 @@
 {
     "entry_point": "workflows.bug_finding_workflow:bug_finding_workflow",
     "name": "bug_finder",
-    "description": "A multi-agent system for finding and fixing bugs in Python code",
-    "version": "0.1.0"
+    "description": "A Google ADK-based system for finding and fixing bugs in Python code",
+    "version": "0.1.0",
+    "root_agent": "bug_finder.agent:root_agent",
+    "python_path": ".",
+    "env_file": ".env"
 } 
