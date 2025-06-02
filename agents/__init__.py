@@ -1,1 +1,1 @@
- 
+"""Bug finder agents package.""" 

@@ -1,0 +1,6 @@
+{
+    "entry_point": "workflows.bug_finding_workflow:bug_finding_workflow",
+    "name": "bug_finder",
+    "description": "A multi-agent system for finding and fixing bugs in Python code",
+    "version": "0.1.0"
+} 
