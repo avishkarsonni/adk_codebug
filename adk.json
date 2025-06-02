@@ -1,5 +1,4 @@
 {
-    "entry_point": "workflows.bug_finding_workflow:bug_finding_workflow",
     "name": "bug_finder",
     "description": "A Google ADK-based system for finding and fixing bugs in Python code",
     "version": "0.1.0",

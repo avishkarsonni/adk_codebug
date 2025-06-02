@@ -1,3 +1,10 @@
-google-adk==1.0.0
-google-generativeai==0.3.2
-python-dotenv 
+# Core dependencies
+google-adk>=1.0.0        # Google's Agent Development Kit
+pydantic>=2.0.0         # For data validation and schema generation
+
+# Environment variables
+python-dotenv>=1.0.0    # For loading .env files
+
+# Optional development dependencies (uncomment if needed)
+# pylint>=3.0.2         # For code analysis
+# astroid>=3.0.1        # Required by pylint 
