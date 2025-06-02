@@ -1,5 +1,0 @@
-google-adk>=1.0.0
-google-generativeai>=0.3.2
-python-dotenv>=1.0.0
-astroid>=3.0.1
-pylint>=3.0.2
