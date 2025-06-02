@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: bug_finder
+Version: 0.1.0
+Requires-Dist: google-adk
+Requires-Dist: google-generativeai

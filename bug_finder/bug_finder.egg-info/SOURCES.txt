@@ -1,0 +1,6 @@
+setup.py
+bug_finder.egg-info/PKG-INFO
+bug_finder.egg-info/SOURCES.txt
+bug_finder.egg-info/dependency_links.txt
+bug_finder.egg-info/requires.txt
+bug_finder.egg-info/top_level.txt

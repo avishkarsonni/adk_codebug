@@ -1,3 +1,30 @@
+Metadata-Version: 2.4
+Name: bug_finder
+Version: 0.1.0
+Summary: A Google ADK-based system for finding and fixing bugs in Python code
+Author: Your Name
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: google-adk>=1.0.0
+Requires-Dist: google-generativeai>=0.3.2
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: astroid>=3.0.1
+Requires-Dist: pylint>=3.0.2
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
 # ADK Bug Finder
 
 An intelligent code analysis and bug detection system built with Google's Agent Development Kit (ADK). This tool leverages ADK's capabilities to analyze code, detect potential issues, and suggest fixes while providing a visual representation of the analysis process.
