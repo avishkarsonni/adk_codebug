@@ -6,6 +6,7 @@ from io import StringIO
 from contextlib import redirect_stdout, redirect_stderr
 from typing import Dict, Any, List
 import ast
+import inspect
 
 from google.adk.agents import Agent
 from google.adk.tools import FunctionTool
@@ -40,10 +41,39 @@ def analyze_code(code: str) -> Dict[str, Any]:
     try:
         tree = ast.parse(code)
         
-        # Analyze the AST for potential issues
+        # Track function definitions and their parameters
+        function_defs = {}
+        
+        # First pass: collect function definitions
         for node in ast.walk(tree):
-            # Check for potential issues
-            if isinstance(node, ast.Try):
+            if isinstance(node, ast.FunctionDef):
+                args = []
+                defaults = len(node.args.defaults)
+                for i, arg in enumerate(node.args.args):
+                    has_default = i >= len(node.args.args) - defaults
+                    args.append({
+                        'name': arg.arg,
+                        'has_default': has_default
+                    })
+                function_defs[node.name] = args
+        
+        # Second pass: analyze for issues
+        for node in ast.walk(tree):
+            # Check function calls against definitions
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                func_name = node.func.id
+                if func_name in function_defs:
+                    required_args = [arg for arg in function_defs[func_name] if not arg['has_default']]
+                    if len(node.args) < len(required_args):
+                        bugs.append({
+                            "type": "logical",
+                            "line": node.lineno,
+                            "description": f"Missing required argument(s) in call to {func_name}(). Expected {len(required_args)} arguments, got {len(node.args)}.",
+                            "severity": "high"
+                        })
+            
+            # Check for bare except clauses
+            elif isinstance(node, ast.Try):
                 for handler in node.handlers:
                     if handler.type is None:
                         bugs.append({
@@ -153,33 +183,58 @@ def execute_code(code: str, timeout_seconds: int = 5) -> Dict[str, Any]:
     import time
     start_time = time.time()
     
-    # Create ADK code execution tool with strict security settings
-    code_executor = ToolCodeExecution(
-        timeout_seconds=timeout_seconds,
-        allowed_modules=[
-            "builtins", "math", "random", "datetime", "json",
-            "typing", "collections", "itertools", "functools"
-        ],
-        blocked_modules=[
-            "os", "sys", "subprocess", "importlib", "pathlib",
-            "socket", "requests", "urllib", "http", "ftp",
-            "telnetlib", "smtplib", "ftplib"
-        ],
-        max_iterations=1000,  # Prevent infinite loops
-        max_memory_mb=100     # Limit memory usage
-    )
+    # Create string buffers for output capture
+    stdout_buffer = StringIO()
+    stderr_buffer = StringIO()
     
     try:
-        # Execute the code
-        result = code_executor.execute(code)
+        # Compile the code first to catch syntax errors
+        compiled_code = compile(code, '<string>', 'exec')
+        
+        # Create a restricted globals dictionary with safe builtins
+        safe_builtins = {
+            'print': print,
+            'len': len,
+            'str': str,
+            'int': int,
+            'float': float,
+            'bool': bool,
+            'list': list,
+            'dict': dict,
+            'set': set,
+            'tuple': tuple,
+            'range': range,
+            'enumerate': enumerate,
+            'zip': zip,
+            'min': min,
+            'max': max,
+            'sum': sum,
+            'abs': abs,
+            'round': round,
+            'True': True,
+            'False': False,
+            'None': None,
+        }
+        
+        restricted_globals = {
+            '__builtins__': safe_builtins,
+            '__name__': '__main__',
+            '__doc__': None,
+            '__package__': None,
+        }
+        
+        # Execute with output capture
+        with redirect_stdout(stdout_buffer), redirect_stderr(stderr_buffer):
+            exec(compiled_code, restricted_globals)
+        
         execution_time = time.time() - start_time
         
         return {
             "status": "success",
             "result": ExecutionResult(
-                stdout=result.stdout or "",
-                stderr=result.stderr or "",
-                error=result.error or "",
+                stdout=stdout_buffer.getvalue(),
+                stderr=stderr_buffer.getvalue(),
+                error="",
                 execution_time=execution_time,
                 runtime_issues=[]
             ).dict()
@@ -190,8 +245,8 @@ def execute_code(code: str, timeout_seconds: int = 5) -> Dict[str, Any]:
         return {
             "status": "error",
             "result": ExecutionResult(
-                stdout="",
-                stderr="",
+                stdout=stdout_buffer.getvalue(),
+                stderr=stderr_buffer.getvalue(),
                 error=f"{type(e).__name__}: {str(e)}",
                 execution_time=execution_time,
                 runtime_issues=[{
