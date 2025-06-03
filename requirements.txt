@@ -8,3 +8,7 @@ python-dotenv>=1.0.0    # For loading .env files
 # Optional development dependencies (uncomment if needed)
 # pylint>=3.0.2         # For code analysis
 # astroid>=3.0.1        # Required by pylint 
+
+# Web interface
+streamlit>=1.28.0       # For creating the web interface
+requests>=2.31.0        # For making HTTP requests to ADK server 
